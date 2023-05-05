@@ -1,17 +1,47 @@
 require("@babel/polyfill");
-import axios from "axios"
 
-async function doSearch(search){
-    try{
-        let result = await axios('https://forkify-api.herokuapp.com/api/search?q='+ search);
-        const recipes = result.data.recipes;
-        console.log(recipes);
+import Search from "./model/Search";
+import { elements, renderLoader, clearLoader } from "./view/base";
+import * as searchView from "./view/searchView";
+
+/*
+
+******* WEB appin tuluv ******
+* hailtin query, ur dun
+* tuhain uzuulj baigaa jor
+* like drsan joruud 
+* zahialj baigaa jorin nairalguud
+
+*/
+
+const state = {};
+
+const controlSearch = async () =>{
+
+    // 1) webees hailtiin tulhuur ugiig gargaj avna
+    const query = searchView.getInput();
+
+    if(query){
+        // 2) shineer hailtiin objegtiig uusgej ugnu
+        state.search = new Search(query);
+
+        // 3) hailt hiihed zoruilj interfaciig beltegnee
+        searchView.clearSearchQuery();
+        searchView.clearSearchResult();
+        renderLoader(elements.searchResultDiv);
+
+        // 4) hailtiig guitsetgene
+        await state.search.doSearch();
     
-        result = await axios('https://forkify-api.herokuapp.com/api/get?rId='+ recipes[1].recipe_id);
-        console.log(result);
-    }catch(error){
-        alert("Асуудал гарлаа: " + error);
+        // 5) hailtiin ur dung delgtsend uzuulne
+        clearLoader();
+        if(state.search.result === undefined) alert("Хайлт илэрцгүй...");
+        else searchView.renderRecipes(state.search.result);
     }
+
 }
 
-doSearch("pizza");
+elements.searchForm.addEventListener("submit", e => {
+    e.preventDefault();
+    controlSearch();
+})
