@@ -3,7 +3,7 @@ import axios from "axios";
     constructor(id){
         this.id = id;
     }
-
+    // axios - iig ashiglan internetees tatah tul async func bicij uguv
     async getRecipe() {
         const result = await axios("https://forkify-api.herokuapp.com/api/get?rId=" + this.id);
 
@@ -17,5 +17,14 @@ import axios from "axios";
 
         console.log(this.title);
         console.log(this.ingredients);
+    }
+
+    calcTime(){
+        // nairlaga burt oiroltsoogoor 5 min zartsuulna
+        this.time = this.ingredients.length * 5;
+    }
+
+    calcHuniiToo(){
+        this.huniiToo = 4;
     }
  }
