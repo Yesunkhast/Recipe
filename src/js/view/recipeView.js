@@ -17,6 +17,7 @@ export const clearRecipe = () => {
 };
 
 export const highlightSelectedRecipe = id => {
+    // massive bolgoh 'Array' classin 'from' func
     const arr = Array.from(document.querySelectorAll('.results__link'));
 
     arr.forEach(el => el.classList.remove('results__link--active'));
